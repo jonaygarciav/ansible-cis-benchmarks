@@ -1,0 +1,581 @@
+---
+#
+# CIS Ubuntu Linux 20.04 Benchmark
+# v1.0.0 - 10-31-2019
+#
+# author: Jonay García González
+# email : jonaygarciav@gmail.com
+#
+- hosts: all
+  become: yes
+  remote_user: root
+  gather_facts: no
+
+  tasks:
+    - name: 1.1.1.1 Ensure mouting of cramfs filesystems is disabled
+      shell: |
+        cmd=$(lsmod | grep cramfs)
+        if [ "${cmd}" = "" ]; then
+          echo 0
+        else
+          echo 1
+        fi
+      register: check_mod_cramfs
+      changed_when: check_mod_cramfs.stdout != '0'
+      tags:
+        - section1
+        - level_1_server
+        - level_1_workstation
+        - 1_initial_setup
+        - 1.1_filesystem_configuration
+        - 1.1.1_disable_unused_filesystems
+        - 1.1.1.1
+
+    - name: 1.1.1.2 Ensure mouting of freevxfs filesystems is disabled
+      shell: |
+        cmd=$(lsmod | grep freevxfs)
+        if [ "${cmd}" = "" ]; then
+          echo 0
+        else
+          echo 1
+        fi
+      register: check_mod_freevxfs
+      changed_when: check_mod_freevxfs.stdout != '0'
+      tags:
+        - section1
+        - level_1_server
+        - level_1_workstation
+        - 1_initial_setup
+        - 1.1_filesystem_configuration
+        - 1.1.1_disable_unused_filesystems
+        - 1.1.1.2
+
+    - name: 1.1.1.3 Ensure mouting of jffs2 filesystems is disabled
+      shell: |
+        cmd=$(lsmod | grep jffs2)
+        if [ "${cmd}" = "" ]; then
+          echo 0
+        else
+          echo 1
+        fi
+      register: check_mod_jffs2
+      changed_when: check_mod_jffs2.stdout != '0'
+      tags:
+        - section1
+        - level_1_server
+        - level_1_workstation
+        - 1_initial_setup
+        - 1.1_filesystem_configuration
+        - 1.1.1_disable_unused_filesystems
+        - 1.1.1.3
+
+    - name: 1.1.1.4 Ensure mouting of hfs filesystems is disabled
+      shell: |
+        cmd=$(lsmod | grep hfs)
+        if [ "${cmd}" = "" ]; then
+          echo 0
+        else
+          echo 1
+        fi
+      register: check_mod_hfs
+      changed_when: check_mod_hfs.stdout != '0'
+      tags:
+        - section1
+        - level_1_server
+        - level_1_workstation
+        - 1_initial_setup
+        - 1.1_filesystem_configuration
+        - 1.1.1_disable_unused_filesystems
+        - 1.1.1.4
+
+    - name: 1.1.1.5 Ensure mouting of hfsplus filesystems is disabled
+      shell: |
+        cmd=$(lsmod | grep hfsplus)
+        if [ "${cmd}" = "" ]; then
+          echo 0
+        else
+          echo 1
+        fi
+      register: check_mod_hfsplus
+      changed_when: check_mod_hfsplus.stdout != '0'
+      tags:
+        - section1
+        - level_1_server
+        - level_1_workstation
+        - 1_initial_setup
+        - 1.1_filesystem_configuration
+        - 1.1.1_disable_unused_filesystems
+        - 1.1.1.5
+
+    - name: 1.1.1.6 Ensure mouting of udf filesystems is disabled
+      shell: |
+        cmd=$(lsmod | grep udf)
+        if [ "${cmd}" = "" ]; then
+          echo 0
+        else
+          echo 1
+        fi
+      register: check_mod_udf
+      changed_when: check_mod_udf.stdout != '0'
+      tags:
+        - section1
+        - level_1_server
+        - level_1_workstation
+        - 1_initial_setup
+        - 1.1_filesystem_configuration
+        - 1.1.1_disable_unused_filesystems
+        - 1.1.1.6
+
+    - name: 1.1.1.7 Ensure mouting of FAT filesystems is disabled
+      shell: |
+        cmd=$(lsmod | grep vfat)
+        if [ "${cmd}" = "" ]; then
+          echo 0
+        else
+          echo 1
+        fi
+      register: check_mod_vfat
+      changed_when: check_mod_vfat.stdout != '0'
+      tags:
+        - section1
+        - level_1_server
+        - level_1_workstation
+        - 1_initial_setup
+        - 1.1_filesystem_configuration
+        - 1.1.1_disable_unused_filesystems
+        - 1.1.1.7
+
+    - name: 1.1.2 Ensure /tmp is configured
+      shell: |
+        cmd=$(mount | grep -E '\s/tmp\s')
+        if [ "${cmd}" != "" ]; then
+          echo 0
+        else
+          echo 1
+        fi
+      register: check_mount_tmp
+      changed_when: check_mount_tmp.stdout != '0'
+      tags:
+        - section1
+        - level_1_server
+        - level_1_workstation
+        - 1_initial_setup
+        - 1.1_filesystem_configuration
+        - 1.1.2
+
+    - name: 1.1.3 Ensure nodev option set on /tmp partition
+      shell: |
+        cmd=$(mount | grep -E '\s/tmp\s' | grep -v nodev)
+        if [ "${cmd}" = "" ]; then
+          echo 0
+        else
+          echo 1
+        fi
+      register: check_mount_tmp_with_nodev_option
+      changed_when: check_mount_tmp_with_nodev_option.stdout != '0'
+      tags:
+        - section1
+        - level_1_server
+        - level_1_workstation
+        - 1_initial_setup
+        - 1.1_filesystem_configuration
+        - 1.1.3
+
+    - name: 1.1.4 Ensure nosuid option set on /tmp partition
+      shell: |
+        cmd=$(mount | grep -E '\s/tmp\s' | grep -v nosuid)
+        if [ "${cmd}" = "" ]; then
+          echo 0
+        else
+          echo 1
+        fi
+      register: check_mount_tmp_with_nosuid_option
+      changed_when: check_mount_tmp_with_nosuid_option.stdout != '0'
+      tags:
+        - section1
+        - level_1_server
+        - level_1_workstation
+        - 1_initial_setup
+        - 1.1_filesystem_configuration
+        - 1.1.4
+
+    - name: 1.1.5 Ensure noexec option set on /tmp partition
+      shell: |
+        cmd=$(mount | grep -E '\s/tmp\s' | grep -v noexec)
+        if [ "${cmd}" = "" ]; then
+          echo 0
+        else
+          echo 1
+        fi
+      register: check_mount_tmp_with_noexec_option
+      changed_when: check_mount_tmp_with_noexec_option.stdout != '0'
+      tags:
+        - section1
+        - level_1_server
+        - level_1_workstation
+        - 1_initial_setup
+        - 1.1_filesystem_configuration
+        - 1.1.5
+
+    - name: 1.1.6 Ensure /dev/shm is configured
+      shell: |
+        cmd=$(mount | grep -E '\s/dev/shm\s')
+        if [ "${cmd}" = "" ]; then
+          echo 0
+        else
+          echo 1
+        fi
+      register: check_mount_dev_shm
+      changed_when: check_mount_dev_shm.stdout != '0'
+      tags:
+        - section1
+        - level_1_server
+        - level_1_workstation
+        - 1_initial_setup
+        - 1.1_filesystem_configuration
+        - 1.1.6
+
+    - name: 1.1.7 Ensure nodev option set on /dev/shm partition
+      shell: |
+        cmd=$(mount | grep -E '\s/dev/shm\s' | grep -v nodev)
+        if [ "${cmd}" = "" ]; then
+          echo 0
+        else
+          echo 1
+        fi
+      register: check_mount_dev_shm_with_nodev_option
+      changed_when: check_mount_dev_shm_with_nodev_option.stdout != '0'
+      tags:
+        - section1
+        - level_1_server
+        - level_1_workstation
+        - 1_initial_setup
+        - 1.1_filesystem_configuration
+        - 1.1.7
+
+    - name: 1.1.8 Ensure nosuid option set on /dev/shm partition
+      shell: |
+        cmd=$(mount | grep -E '\s/dev/shm\s' | grep -v nosuid)
+        if [ "${cmd}" = "" ]; then
+          echo 0
+        else
+          echo 1
+        fi
+      register: check_mount_dev_shm_with_nosuid_option
+      changed_when: check_mount_dev_shm_with_nosuid_option.stdout != '0'
+      tags:
+        - section1
+        - level_1_server
+        - level_1_workstation
+        - 1_initial_setup
+        - 1.1_filesystem_configuration
+        - 1.1.8
+
+    - name: 1.1.9 Ensure noexec option set on /dev/shm partition
+      shell: |
+        cmd=$(mount | grep -E '\s/dev/shm\s' | grep -v noexec)
+        if [ "${cmd}" = "" ]; then
+          echo 0
+        else
+          echo 1
+        fi
+      register: check_mount_dev_shm_with_noexec_option
+      changed_when: check_mount_dev_shm_with_noexec_option.stdout != '0'
+      tags:
+        - section1
+        - level_1_server
+        - level_1_workstation
+        - 1_initial_setup
+        - 1.1_filesystem_configuration
+        - 1.1.9
+
+    - name: 1.1.10 Ensure separate partition exists for /var
+      shell: |
+        cmd=$(mount | grep -E '\s/var\s')
+        if [ "${cmd}" = "" ]; then
+          echo 0
+        else
+          echo 1
+        fi
+      register: check_mount_var
+      changed_when: check_mount_var.stdout != '1'
+      tags:
+        - section1
+        - level_2_server
+        - level_2_workstation
+        - 1_initial_setup
+        - 1.1_filesystem_configuration
+        - 1.1.10
+
+    - name: 1.1.11 Ensure separate partition exists for /var/tmp
+      shell: |
+        cmd=$(mount | grep -E '\s/var/tmp\s')
+        if [ "${cmd}" = "" ]; then
+          echo 0
+        else
+          echo 1
+        fi
+      register: check_mount_var_tmp
+      changed_when: check_mount_var_tmp.stdout != '1'
+      tags:
+        - section1
+        - level_2_server
+        - level_2_workstation
+        - 1_initial_setup
+        - 1.1_filesystem_configuration
+        - 1.1.11
+
+    - name: 1.1.12 Ensure nodev option set on /var/tmp partition
+      shell: |
+        cmd=$(mount | grep -E '\s/var/tmp\s' | grep -v nodev)
+        if [ "${cmd}" = "" ]; then
+          echo 0
+        else
+          echo 1
+        fi
+      register: check_mount_var_tmp_with_nodev_option
+      changed_when: check_mount_var_tmp_with_nodev_option.stdout != '1'
+      tags:
+        - section1
+        - level_1_server
+        - level_1_workstation
+        - 1_initial_setup
+        - 1.1_filesystem_configuration
+        - 1.1.12
+
+    - name: 1.1.13 Ensure nosuid option set on /var/tmp partition
+      shell: |
+        cmd=$(mount | grep -E '\s/var/tmp\s' | grep -v nosuid)
+        if [ "${cmd}" = "" ]; then
+          echo 0
+        else
+          echo 1
+        fi
+      register: check_mount_var_tmp_with_nosuid_option
+      changed_when: check_mount_var_tmp_with_nosuid_option.stdout != '1'
+      tags:
+        - section1
+        - level_1_server
+        - level_1_workstation
+        - 1_initial_setup
+        - 1.1_filesystem_configuration
+        - 1.1.13
+
+    - name: 1.1.14 Ensure noexec option set on /var/tmp partition
+      shell: |
+        cmd=$(mount | grep -E '\s/var/tmp\s' | grep -v noexec)
+        if [ "${cmd}" = "" ]; then
+          echo 0
+        else
+          echo 1
+        fi
+      register: check_mount_var_tmp_with_noexec_option
+      changed_when: check_mount_var_tmp_with_noexec_option.stdout != '1'
+      tags:
+        - section1
+        - level_1_server
+        - level_1_workstation
+        - 1_initial_setup
+        - 1.1_filesystem_configuration
+        - 1.1.14
+
+    - name: 1.1.15 Ensure separate partition exists for /var/log
+      shell: |
+        cmd=$(mount | grep -E '\s/var/log\s')
+        if [ "${cmd}" = "" ]; then
+          echo 0
+        else
+          echo 1
+        fi
+      register: check_mount_var_log
+      changed_when: check_mount_var_log.stdout != '1'
+      tags:
+        - section1
+        - level_2_server
+        - level_2_workstation
+        - 1_initial_setup
+        - 1.1_filesystem_configuration
+        - 1.1.15
+
+    - name: 1.1.16 Ensure separate partition exists for /var/log/audit
+      shell: |
+        cmd=$(mount | grep -E '\s/var/audit\s')
+        if [ "${cmd}" = "" ]; then
+          echo 0
+        else
+          echo 1
+        fi
+      register: check_mount_var_audit
+      changed_when: check_mount_var_audit.stdout != '1'
+      tags:
+        - section1
+        - level_2_server
+        - level_2_workstation
+        - 1_initial_setup
+        - 1.1_filesystem_configuration
+        - 1.1.16
+
+    - name: 1.1.17 Ensure separate partition exists for /home
+      shell: |
+        cmd=$(mount | grep -E '\s/home\s')
+        if [ "${cmd}" = "" ]; then
+          echo 0
+        else
+          echo 1
+        fi
+      register: check_mount_home
+      changed_when: check_mount_home.stdout != '1'
+      tags:
+        - section1
+        - level_2_server
+        - level_2_workstation
+        - 1_initial_setup
+        - 1.1_filesystem_configuration
+        - 1.1.17
+
+    - name: 1.1.18 Ensure nodev option set on /home partition
+      shell: |
+        cmd=$(mount | grep -E '\s/home\s' | grep -v nodev)
+        if [ "${cmd}" = "" ]; then
+          echo 0
+        else
+          echo 1
+        fi
+      register: check_mount_home_with_nodev_option
+      changed_when: check_mount_home_with_nodev_option.stdout != '1'
+      tags:
+        - section1
+        - level_2_server
+        - level_2_workstation
+        - 1_initial_setup
+        - 1.1_filesystem_configuration
+        - 1.1.18
+
+    - name: 1.1.19 Ensure nodev option set on removable media partitions
+      shell: |
+        cmd1=$(mount | grep -E '/dev/cdrom|/dev/sr0' | grep nodev)
+        cmd2=$(mount | grep -E '/dev/cdrom|/dev/sr0')
+        if [ "${cmd1}" != "" ]; then
+          echo 0;
+        elif [ "${cmd2}" != "" ]
+        then
+          echo 1;
+        else
+          echo 0;
+        fi
+      register: check_mount_removable_media_with_nodev_option
+      changed_when: check_mount_removable_media_with_nodev_option.stdout != '0'
+      tags:
+        - section1
+        - level_1_server
+        - level_1_workstation
+        - 1_initial_setup
+        - 1.1_filesystem_configuration
+        - 1.1.19
+
+    - name: 1.1.20 Ensure nosuid option set on removable media partitions
+      shell: |
+        cmd1=$(mount | grep -E '/dev/cdrom|/dev/sr0' | grep nosuid)
+        cmd2=$(mount | grep -E '/dev/cdrom|/dev/sr0')
+        if [ "${cmd1}" != "" ]; then
+          echo 0;
+        elif [ "${cmd2}" != "" ]
+        then
+          echo 1;
+        else
+          echo 0;
+        fi
+      register: check_mount_removable_media_with_nosuid_option
+      changed_when: check_mount_removable_media_with_nosuid_option.stdout != '0'
+      tags:
+        - section1
+        - level_1_server
+        - level_1_workstation
+        - 1_initial_setup
+        - 1.1_filesystem_configuration
+        - 1.1.20
+
+    - name: 1.1.21 Ensure noexec option set on removable media partitions
+      shell: |
+        cmd1=$(mount | grep -E '/dev/cdrom|/dev/sr0' | grep noexec)
+        cmd2=$(mount | grep -E '/dev/cdrom|/dev/sr0')
+        if [ "${cmd1}" != "" ]; then
+          echo 0;
+        elif [ "${cmd2}" != "" ]
+        then
+          echo 1;
+        else
+          echo 0;
+        fi
+      register: check_mount_removable_media_with_noexec_option
+      changed_when: check_mount_removable_media_with_noexec_option.stdout != '0'
+      tags:
+        - section1
+        - level_1_server
+        - level_1_workstation
+        - 1_initial_setup
+        - 1.1_filesystem_configuration
+        - 1.1.21
+
+    - name: 1.1.22 Ensure sticky bit is set on all world-writable directories
+      shell: |
+        cmd=$(df --local -P | awk '{if (NR!=1) print $6}' | xargs -I '{}' find '{}' -xdev -type d -perm -0002 -a ! -perm -1000 2>/dev/null)
+        if [ "${cmd}" = "" ]; then
+          echo 0;
+        else
+          echo 1;
+        fi
+      register: check_sticky_bit_on_world_writable_directories
+      changed_when: check_sticky_bit_on_world_writable_directories.stdout != '0'
+      tags:
+        - section1
+        - level_1_server
+        - level_1_workstation
+        - 1_initial_setup
+        - 1.1_filesystem_configuration
+        - 1.1.22
+          
+    - name: 1.1.23 Disable Automounting
+      shell: |
+        cmd1=$(systemctl list-units --full --all | grep autofs)
+        cmd2=$(systemctl is-enabled autofs | grep -E 'enabled|disable')
+        if [ "$(cmd1)" = "" ]; then
+          echo 0; 
+        elif [ "$(cmd2)" != "" ]; then
+          echo 1; 
+        else 
+          echo 0; 
+        fi
+      register: check_disable_automounting
+      changed_when: check_disable_automounting.stdout != '0'
+      tags:
+        - section1
+        - level_1_server
+        - level_1_workstation
+        - 1_initial_setup
+        - 1.1_filesystem_configuration
+        - 1.1.23
+
+    - name: 1.1.24 Disable USB Storage
+      shell: |
+        cmd=$(lsmod | grep usb-storage)
+        if [ "${cmd}" = "" ]; then
+          echo 0
+        else
+          echo 1
+        fi
+      register: check_mod_usb_storage
+      changed_when: check_mod_usb_storage.stdout != '0'
+      tags:
+        - section1
+        - level_1_server
+        - level_1_workstation
+        - 1_initial_setup
+        - 1.1_filesystem_configuration
+        - 1.1.1_disable_unused_filesystems
+        - 1.1.24
+
+#    - name: Print variable
+#      debug: 
+#        msg: "Variable: '{{ check_sticky_bit_on_world_writable_directories }}'"
+ 
